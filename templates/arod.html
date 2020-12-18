@@ -1,10 +1,127 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>A&SBaseballDatabase</title>
 </head>
 <body>
-  <h1>Stats on Alex Rodriguez</h1>
+  <h1>A Tribute to Alex Rodriguez</h1>
 </body>
-</html>
+</html> -->
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{% block title %} A Tribute to Alex Rodriguez {% endblock %}</h1>
+  <!-- {% for post2 in arodBatting %}
+        <a href="#">
+            <h2>{{ post2['yearID'] }}</h2>
+        </a>
+        <span class="badge badge-primary">{{ post2['R'] }}</span>
+        <hr>
+    {% endfor %} -->
+  <img src= "../static/arodruns.jpg"/>
+  <img src="../static/arodhits.jpg"/>
+  <img src="../static/arodsecb.jpg"/>
+  <img src="../static/arodthirb.jpg"/>
+  <img src="../static/arodhr.jpg"/>
+  <h2>Alex Rodriguez Batting Statistics</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Runs</th>
+        <th>Hits</th>
+        <th>Doubles</th>
+        <th>Triples</th>
+        <th>Home Runs</th>
+      </tr>
+    </thead>
+    {% for post in arodBatting %}
+    <tbody>
+        <tr>
+            <td>{{ post['yearID'] }}</td>
+            <td>{{ post['R'] }}</td>
+            <td>{{ post['H'] }}</td>
+            <td>{{ post['2B'] }}</td>
+            <td>{{ post['3B'] }}</td>
+            <td>{{ post['HR'] }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+
+
+  <h2>Alex Rodriguez Fielding Statistics</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Team</th>
+        <th>Position</th>
+        <th>Games</th>
+        <th>Assists</th>
+        <th>Errors</th>
+        <th>Zone Rating</th>
+      </tr>
+    </thead>
+    {% for post in arodFielding %}
+    <tbody>
+        <tr>
+            <td>{{ post['yearID'] }}</td>
+            <td>{{ post['teamID'] }}</td>
+            <td>{{ post['Pos'] }}</td>
+            <td>{{ post['G'] }}</td>
+            <td>{{ post['A'] }}</td>
+            <td>{{ post['E'] }}</td>
+            <td>{{ post['ZR'] }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+
+  <h2>Alex Rodriguez AllStar Statistics</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Team</th>
+        <th>League</th>
+        <th>Position</th>
+      </tr>
+    </thead>
+    {% for post in arodAllStar %}
+    <tbody>
+        <tr>
+            <td>{{ post['YearID'] }}</td>
+            <td>{{ post['teamID'] }}</td>
+            <td>{{ post['lgID'] }}</td>
+            <td>{{ post['startingPos'] }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+
+  <h2>Alex Rodriguez Awards Statistics</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Award</th>
+        <th>Year</th>
+        <th>League</th>
+        <th>Notes About Award</th>
+      </tr>
+    </thead>
+    {% for post in arodAwards %}
+    <tbody>
+        <tr>
+            <td>{{ post['awardID'] }}</td>
+            <td>{{ post['yearID'] }}</td>
+            <td>{{ post['lgID'] }}</td>
+            <td>{{ post['notes'] }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+
+  <img src="../static/arodsalary.jpg"/>
+{% endblock %}
