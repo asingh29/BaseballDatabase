@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,4 +9,16 @@
   <label for="name">Player Name:</label>
   <input type="text" id="name" name="name" required>
 </body>
-</html>
+</html> -->
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{% block title %} Lookup the statistics of any player from here {% endblock %}</h1>
+  <form action="/lookup" method="POST">
+    <div class="form-group">
+        <label for="name">Lookup</label>
+        <input type="text" name="name" placeholder="First and Last Name" id="name">
+    </div>
+    <input class="btn btn btn-primary" type="submit" value="Send"/>
+  </form>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{% block title %} Lookup the statistics of any team from here {% endblock %}</h1>
+  <form action="/lookupteam" method="POST">
+    <div class="form-group">
+        <input type="text" name="name" placeholder="Name" id="name">
+        <input type="text" name="year" placeholder="Year" id="year">
+    </div>
+    <input class="btn btn btn-primary" type="submit" value="Send"/>
+  </form>
+{% endblock %}

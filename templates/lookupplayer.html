@@ -1,31 +1,12 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>A&SBaseballDatabase</title>
-</head>
-<body>
-  <h1>A Tribute to Alex Rodriguez</h1>
-</body>
-</html> -->
-
 {% extends 'base.html' %}
 {% block content %}
-  <h1>{% block title %} A Tribute to Alex Rodriguez {% endblock %}</h1>
-  <!-- {% for post2 in arodBatting %}
-        <a href="#">
-            <h2>{{ post2['yearID'] }}</h2>
-        </a>
-        <span class="badge badge-primary">{{ post2['R'] }}</span>
-        <hr>
-    {% endfor %} -->
-  <img src="https://images2.minutemediacdn.com/image/fetch/w_736,h_485,c_fill,g_auto,f_auto/https%3A%2F%2Fyanksgoyard.com%2Ffiles%2F2016%2F02%2Fyan-gomes-alex-rodriguez-mlb-cleveland-indians-new-york-yankees-590x900.jpg"/>
-  <img src= "../static/arodruns.jpg"/>
-  <img src="../static/arodhits.jpg"/>
-  <img src="../static/arodsecb.jpg"/>
-  <img src="../static/arodthirb.jpg"/>
-  <img src="../static/arodhr.jpg"/>
-  <h2>Alex Rodriguez Batting Statistics</h2>
+  <h1>{% block title %} {{ name }} Statistics {% endblock %}</h1>
+  <img src= "../static/playerruns.jpg"/>
+  <img src="../static/playerhits.jpg"/>
+  <img src="../static/playersecb.jpg"/>
+  <img src="../static/playerthirb.jpg"/>
+  <img src="../static/playerhr.jpg"/>
+  <h2>{{ name }} Batting Statistics</h2>
   <table class="table table-hover">
     <thead class="thead-light">
       <tr>
@@ -52,7 +33,7 @@
   </table>
 
 
-  <h2>Alex Rodriguez Fielding Statistics</h2>
+  <h2>{{ name }} Fielding Statistics</h2>
   <table class="table table-hover">
     <thead class="thead-light">
       <tr>
@@ -80,8 +61,7 @@
     {% endfor %}
   </table>
 
-  <img src= "https://static01.nyt.com/images/2015/07/07/sports/Y-JP-ALLSTARS/Y-JP-ALLSTARS-articleLarge.jpg?quality=75&auto=webp&disable=upscale"/>
-  <h2>Alex Rodriguez AllStar Statistics</h2>
+  <h2>{{ name }} AllStar Statistics</h2>
   <table class="table table-hover">
     <thead class="thead-light">
       <tr>
@@ -103,8 +83,7 @@
     {% endfor %}
   </table>
 
-  <img src= "https://i.pinimg.com/originals/09/61/2a/09612af4a9584b74bb86ecb1ec694bcf.jpg"/>
-  <h2>Alex Rodriguez Awards Statistics</h2>
+  <h2>{{ name }} Awards Statistics</h2>
   <table class="table table-hover">
     <thead class="thead-light">
       <tr>
@@ -126,5 +105,5 @@
     {% endfor %}
   </table>
 
-  <img src="../static/arodsalary.jpg"/>
+  <!-- <img src="../static/playersalary.jpg"/> -->
 {% endblock %}
