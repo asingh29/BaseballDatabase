@@ -389,11 +389,14 @@ def lookupTeamStats():
     name = '\"' + name + '\"'
     year = request.form['year']
     conn = get_db_connection()
-    getTeam = conn.execute('SELECT W,L,R,AB,H,"2B","3B",HR,BB,SO,SB,RA FROM Teams INNER JOIN TeamsFranchises ON Teams.franchID=TeamsFranchises.franchID WHERE TeamsFranchises.franchName = ' + name + ' AND Teams.yearID = ' + year).fetchall()
-    avgTeam = conn.execute('SELECT AVG(W),AVG(L),AVG(R),AVG(AB),AVG(H),AVG("2B"),AVG("3B"),AVG(HR),AVG(BB),AVG(SO),AVG(SB),AVG(RA) FROM Teams INNER JOIN TeamsFranchises ON Teams.franchID=TeamsFranchises.franchID WHERE Teams.yearID = ' + year).fetchall()
+    if year == "":
+        getTeam = conn.execute('SELECT yearID,W,L,R,AB,H,"2B","3B",HR,BB,SO,SB,RA FROM Teams INNER JOIN TeamsFranchises ON Teams.franchID=TeamsFranchises.franchID WHERE TeamsFranchises.franchName = ' + name).fetchall()
+    else:
+        getTeam = conn.execute('SELECT yearID,W,L,R,AB,H,"2B","3B",HR,BB,SO,SB,RA FROM Teams INNER JOIN TeamsFranchises ON Teams.franchID=TeamsFranchises.franchID WHERE TeamsFranchises.franchName = ' + name + ' AND Teams.yearID = ' + year).fetchall()
+        avgTeam = conn.execute('SELECT AVG(W),AVG(L),AVG(R),AVG(AB),AVG(H),AVG("2B"),AVG("3B"),AVG(HR),AVG(BB),AVG(SO),AVG(SB),AVG(RA) FROM Teams INNER JOIN TeamsFranchises ON Teams.franchID=TeamsFranchises.franchID WHERE Teams.yearID = ' + year).fetchall()
     
     name = name[1:len(name)-1]
-    return render_template('lookupteamsstats.html', getTeam=getTeam, name=name, year=year, avgTeam=avgTeam)
+    return render_template('lookupteamsstats.html', getTeam=getTeam, name=name, year=year)
 
 @app.route('/lookup')
 def lookup():
