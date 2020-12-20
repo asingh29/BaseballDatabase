@@ -110,56 +110,30 @@ def altitude():
     indexHighAlt = highAltBattingPD['year'].tolist()
 
 
-    dfRuns = pd.DataFrame({'avgRuns': avgBattingPD['runs'].tolist(), 'High Alt Runs':highAltBattingPD['runs'].tolist()}, index=indexHighAlt)
-    axRuns = dfRuns.plot.bar(rot=90, title="High Alt Runs VS Average Batter")
+    dfRuns = pd.DataFrame({'avgRuns': avgBattingPD['runs'].tolist(), 'High Alt Runs':highAltBattingPD['runs'].tolist(), 'Low Alt Runs':lowAltBattingPD['runs'].tolist()}, index=indexHighAlt)
+    axRuns = dfRuns.plot.bar(rot=90, title="High Alt Runs VS Low Alt Runs VS Average Batter")
     figRuns = axRuns.get_figure()
-    figRuns.savefig('static/highaltruns.jpg')
+    figRuns.savefig('static/highaltruns2.jpg')
     
-    dfHits = pd.DataFrame({'avgHits': avgBattingPD['hits'].tolist(), 'High Alt Hits':highAltBattingPD['hits'].tolist()}, index=indexHighAlt)
-    axHits = dfHits.plot.bar(rot=90, title="High Alt Hits VS Average Batter")
+    dfHits = pd.DataFrame({'avgHits': avgBattingPD['hits'].tolist(), 'High Alt Hits':highAltBattingPD['hits'].tolist(), 'Low Alt Hits':lowAltBattingPD['hits'].tolist()}, index=indexHighAlt)
+    axHits = dfHits.plot.bar(rot=90, title="High Alt Hits VS Low Alt Hits VS Average Batter")
     figHits = axHits.get_figure()
-    figHits.savefig('static/highalthits.jpg')
+    figHits.savefig('static/highalthits2.jpg')
 
-    df2B = pd.DataFrame({'avg2B': avgBattingPD['2B'].tolist(), 'High Alt 2B':highAltBattingPD['2B'].tolist()}, index=indexHighAlt)
-    ax2B = df2B.plot.bar(rot=90, title="High Alt 2B VS Average Batter")
+    df2B = pd.DataFrame({'avg2B': avgBattingPD['2B'].tolist(), 'High Alt 2B':highAltBattingPD['2B'].tolist(), 'Low Alt 2B':lowAltBattingPD['2B'].tolist()}, index=indexHighAlt)
+    ax2B = df2B.plot.bar(rot=90, title="High Alt 2B VS Low Alt 2B VS Average Batter")
     fig2B = ax2B.get_figure()
-    fig2B.savefig('static/highaltsecb.jpg')
+    fig2B.savefig('static/highaltsecb2.jpg')
 
-    df3B = pd.DataFrame({'avg3B': avgBattingPD['3B'].tolist(), 'High Alt 3B':highAltBattingPD['3B'].tolist()}, index=indexHighAlt)
-    ax3B = df3B.plot.bar(rot=90, title="High Alt 3B VS Average Batter")
+    df3B = pd.DataFrame({'avg3B': avgBattingPD['3B'].tolist(), 'High Alt 3B':highAltBattingPD['3B'].tolist(), 'Low Alt 3B':lowAltBattingPD['3B'].tolist()}, index=indexHighAlt)
+    ax3B = df3B.plot.bar(rot=90, title="High Alt 3B VS Low Alt 3B VS Average Batter")
     fig3B = ax3B.get_figure()
-    fig3B.savefig('static/highaltthirb.jpg')
+    fig3B.savefig('static/highaltthirb2.jpg')
 
-    dfHR = pd.DataFrame({'avgHR': avgBattingPD['HR'].tolist(), 'High Alt HR':highAltBattingPD['HR'].tolist()}, index=indexHighAlt)
-    axHR = dfHR.plot.bar(rot=90, title="High Alt HR VS Average Batter")
+    dfHR = pd.DataFrame({'avgHR': avgBattingPD['HR'].tolist(), 'High Alt HR':highAltBattingPD['HR'].tolist(), 'Low Alt HR':lowAltBattingPD['HR'].tolist()}, index=indexHighAlt)
+    axHR = dfHR.plot.bar(rot=90, title="High Alt HR VS Low Alt HR VS Average Batter")
     figHR = axHR.get_figure()
-    figHR.savefig('static/highalthr.jpg')
-
-
-    dfRunsl = pd.DataFrame({'avgRuns': avgBattingPD['runs'].tolist(), 'Low Alt Runs':lowAltBattingPD['runs'].tolist()}, index=indexLowAlt)
-    axRunsl = dfRunsl.plot.bar(rot=90, title="Low Alt Runs VS Average Batter")
-    figRunsl = axRunsl.get_figure()
-    figRunsl.savefig('static/highaltrunsl.jpg')
-    
-    dfHitsl = pd.DataFrame({'avgHits': avgBattingPD['hits'].tolist(), 'Low Alt Hits':lowAltBattingPD['hits'].tolist()}, index=indexLowAlt)
-    axHitsl = dfHitsl.plot.bar(rot=90, title="Low Alt Hits VS Average Batter")
-    figHitsl = axHitsl.get_figure()
-    figHitsl.savefig('static/highalthitsl.jpg')
-
-    df2Bl = pd.DataFrame({'avg2B': avgBattingPD['2B'].tolist(), 'Low Alt 2B':lowAltBattingPD['2B'].tolist()}, index=indexLowAlt)
-    ax2Bl = df2Bl.plot.bar(rot=90, title="Low Alt 2B VS Average Batter")
-    fig2Bl = ax2Bl.get_figure()
-    fig2Bl.savefig('static/highaltsecbl.jpg')
-
-    df3Bl = pd.DataFrame({'avg3B': avgBattingPD['3B'].tolist(), 'Low Alt 3B':lowAltBattingPD['3B'].tolist()}, index=indexLowAlt)
-    ax3Bl = df3Bl.plot.bar(rot=90, title="Low Alt 3B VS Average Batter")
-    fig3Bl = ax3Bl.get_figure()
-    fig3Bl.savefig('static/highaltthirbl.jpg')
-
-    dfHRl = pd.DataFrame({'avgHR': avgBattingPD['HR'].tolist(), 'Low Alt HR':lowAltBattingPD['HR'].tolist()}, index=indexLowAlt)
-    axHRl = dfHRl.plot.bar(rot=90, title="Low Alt HR VS Average Batter")
-    figHRl = axHRl.get_figure()
-    figHRl.savefig('static/highalthrl.jpg')
+    figHR.savefig('static/highalthr2.jpg')
 
     return render_template('altitude.html')
 
