@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,4 +8,14 @@
   <h1>Performance Enhancing Drugs Effects on the game of Baseball</h1>
     <p> They are bad!!!! </p>
 </body>
-</html>
+</html> -->
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{% block title %} Performance Enhancing Drugs Effects on the game of Baseball {% endblock %}</h1>
+  <img src= "../static/runsbyera.jpg"/>
+  <img src= "../static/hitsbyera.jpg"/>
+  <img src= "../static/doublesbyera.jpg"/>
+  <img src= "../static/triplesbyera.jpg"/>
+  <img src= "../static/homerunsbyera.jpg"/>
+{% endblock %}

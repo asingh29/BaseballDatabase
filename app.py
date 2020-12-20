@@ -6,6 +6,7 @@ import matplotlib
 import os
 from sklearn.cluster import KMeans
 from sklearn import metrics
+import numpy as np
 
 app = Flask(__name__)
 
@@ -86,21 +87,146 @@ def arod():
 
 @app.route('/altitude')
 def altitude():
+    conn = get_db_connection()
+    matplotlib.use('agg')
+    # > 800ft, 6 teams
+    highAltBatting = conn.execute('SELECT yearID,AVG(Teams.R),AVG(Teams.H),AVG(Teams."2B"),AVG(Teams."3B"),AVG(Teams.HR) FROM (Teams) WHERE (Teams.name = "Kansas City Royals" OR Teams.name = "Minnesota Twins" OR Teams.name = "Atlanta Braves" OR Teams.name = "Pittsburgh Pirates" OR Teams.name = "Arizona Diamondbacks" OR Teams.name = "Colorado Rockies") AND yearID > 2000 GROUP BY yearID').fetchall()
+    # < 100ft, 9 teams
+    lowAltBatting = conn.execute('SELECT yearID,AVG(Teams.R),AVG(Teams.H),AVG(Teams."2B"),AVG(Teams."3B"),AVG(Teams.HR) FROM (Teams) WHERE (Teams.name = "New York Yankees" OR Teams.name = "Tampa Bay Rays" OR Teams.name = "Houston Astros" OR Teams.name = "Oakland Athletics" OR Teams.name = "Miami Marlins" OR Teams.name = "New York Mets" OR Teams.name = "Philadelphia Phillies" OR Teams.name = "San Diego Padres" OR Teams.name = "San Francisco Giants") AND yearID > 2000 GROUP BY yearID').fetchall()
+    avgBatting = conn.execute('SELECT yearID,AVG(Teams.R),AVG(Teams.H),AVG(Teams."2B"),AVG(Teams."3B"),AVG(Teams.HR) FROM (Teams) WHERE yearID > 2000 GROUP BY yearID').fetchall()
+    avgBattingPD = pd.DataFrame(avgBatting)
+    highAltBattingPD = pd.DataFrame(highAltBatting)
+    lowAltBattingPD = pd.DataFrame(lowAltBatting)
+
+    cols = ['year runs hits 2B 3B HR']
+
+    avgBattingPD.rename(columns = {0:'year', 1:'runs',
+                                2:'hits', 3:'2B', 4:'3B', 5:'HR'}, inplace = True)
+    highAltBattingPD.rename(columns = {0:'year', 1:'runs',
+                                2:'hits', 3:'2B', 4:'3B', 5:'HR'}, inplace = True)
+    lowAltBattingPD.rename(columns = {0:'year', 1:'runs',
+                                2:'hits', 3:'2B', 4:'3B', 5:'HR'}, inplace = True)
+    indexLowAlt = lowAltBattingPD['year'].tolist()
+    indexHighAlt = highAltBattingPD['year'].tolist()
+
+
+    dfRuns = pd.DataFrame({'avgRuns': avgBattingPD['runs'].tolist(), 'High Alt Runs':highAltBattingPD['runs'].tolist()}, index=indexHighAlt)
+    axRuns = dfRuns.plot.bar(rot=90, title="High Alt Runs VS Average Batter")
+    figRuns = axRuns.get_figure()
+    figRuns.savefig('static/highaltruns.jpg')
+    
+    dfHits = pd.DataFrame({'avgHits': avgBattingPD['hits'].tolist(), 'High Alt Hits':highAltBattingPD['hits'].tolist()}, index=indexHighAlt)
+    axHits = dfHits.plot.bar(rot=90, title="High Alt Hits VS Average Batter")
+    figHits = axHits.get_figure()
+    figHits.savefig('static/highalthits.jpg')
+
+    df2B = pd.DataFrame({'avg2B': avgBattingPD['2B'].tolist(), 'High Alt 2B':highAltBattingPD['2B'].tolist()}, index=indexHighAlt)
+    ax2B = df2B.plot.bar(rot=90, title="High Alt 2B VS Average Batter")
+    fig2B = ax2B.get_figure()
+    fig2B.savefig('static/highaltsecb.jpg')
+
+    df3B = pd.DataFrame({'avg3B': avgBattingPD['3B'].tolist(), 'High Alt 3B':highAltBattingPD['3B'].tolist()}, index=indexHighAlt)
+    ax3B = df3B.plot.bar(rot=90, title="High Alt 3B VS Average Batter")
+    fig3B = ax3B.get_figure()
+    fig3B.savefig('static/highaltthirb.jpg')
+
+    dfHR = pd.DataFrame({'avgHR': avgBattingPD['HR'].tolist(), 'High Alt HR':highAltBattingPD['HR'].tolist()}, index=indexHighAlt)
+    axHR = dfHR.plot.bar(rot=90, title="High Alt HR VS Average Batter")
+    figHR = axHR.get_figure()
+    figHR.savefig('static/highalthr.jpg')
+
+
+    dfRunsl = pd.DataFrame({'avgRuns': avgBattingPD['runs'].tolist(), 'Low Alt Runs':lowAltBattingPD['runs'].tolist()}, index=indexLowAlt)
+    axRunsl = dfRunsl.plot.bar(rot=90, title="Low Alt Runs VS Average Batter")
+    figRunsl = axRunsl.get_figure()
+    figRunsl.savefig('static/highaltrunsl.jpg')
+    
+    dfHitsl = pd.DataFrame({'avgHits': avgBattingPD['hits'].tolist(), 'Low Alt Hits':lowAltBattingPD['hits'].tolist()}, index=indexLowAlt)
+    axHitsl = dfHitsl.plot.bar(rot=90, title="Low Alt Hits VS Average Batter")
+    figHitsl = axHitsl.get_figure()
+    figHitsl.savefig('static/highalthitsl.jpg')
+
+    df2Bl = pd.DataFrame({'avg2B': avgBattingPD['2B'].tolist(), 'Low Alt 2B':lowAltBattingPD['2B'].tolist()}, index=indexLowAlt)
+    ax2Bl = df2Bl.plot.bar(rot=90, title="Low Alt 2B VS Average Batter")
+    fig2Bl = ax2Bl.get_figure()
+    fig2Bl.savefig('static/highaltsecbl.jpg')
+
+    df3Bl = pd.DataFrame({'avg3B': avgBattingPD['3B'].tolist(), 'Low Alt 3B':lowAltBattingPD['3B'].tolist()}, index=indexLowAlt)
+    ax3Bl = df3Bl.plot.bar(rot=90, title="Low Alt 3B VS Average Batter")
+    fig3Bl = ax3Bl.get_figure()
+    fig3Bl.savefig('static/highaltthirbl.jpg')
+
+    dfHRl = pd.DataFrame({'avgHR': avgBattingPD['HR'].tolist(), 'Low Alt HR':lowAltBattingPD['HR'].tolist()}, index=indexLowAlt)
+    axHRl = dfHRl.plot.bar(rot=90, title="Low Alt HR VS Average Batter")
+    figHRl = axHRl.get_figure()
+    figHRl.savefig('static/highalthrl.jpg')
+
     return render_template('altitude.html')
 
 @app.route('/peds')
 def peds():
-    return render_template('peds.html')
+    conn = get_db_connection()
+    matplotlib.use('agg')
 
-@app.route('/lookupteam')
-def lookupTeam():
-    return render_template('lookupteam.html')
+    pre1975Batting = conn.execute('SELECT AVG(Teams.R),AVG(Teams.H),AVG(Teams."2B"),AVG(Teams."3B"),AVG(Teams.HR) FROM (Teams) WHERE yearID < 1975').fetchall()
+    from75to90Batting = conn.execute('SELECT AVG(Teams.R),AVG(Teams.H),AVG(Teams."2B"),AVG(Teams."3B"),AVG(Teams.HR) FROM (Teams) WHERE yearID >= 1975 AND yearID < 1990').fetchall()
+    from90to05Batting = conn.execute('SELECT AVG(Teams.R),AVG(Teams.H),AVG(Teams."2B"),AVG(Teams."3B"),AVG(Teams.HR) FROM (Teams) WHERE yearID >= 1990 AND yearID < 2005').fetchall()
+    post2005Batting = conn.execute('SELECT AVG(Teams.R),AVG(Teams.H),AVG(Teams."2B"),AVG(Teams."3B"),AVG(Teams.HR) FROM (Teams) WHERE yearID >= 2005').fetchall()
+    
+    pre1975BattingPD = pd.DataFrame(pre1975Batting)
+    from75to90BattingPD = pd.DataFrame(from75to90Batting)
+    from90to05BattingPD = pd.DataFrame(from90to05Batting)
+    post2005BattingPD = pd.DataFrame(post2005Batting)
 
-@app.route('/lookupteam', methods=['POST'])
-def lookupTeam2():
-    name = request.form['name']
-    year = request.form['year']
-    return render_template('index.html')
+    indexAROD = ["past-1974","1975-1989","1990-2004", "2005-now"]
+    index = [0, 1, 2, 3]
+
+    plt.clf()
+    eraruns = [pre1975BattingPD[0].iloc[0], from75to90BattingPD[0].iloc[0], from90to05BattingPD[0].iloc[0], post2005BattingPD[0].iloc[0]]
+    plt.bar(index, eraruns)
+    plt.xlabel("ERAS")
+    plt.ylabel("AVERAGE RUNS")
+    plt.title("AVERAGE RUNS BY ERA")
+    plt.xticks(index, indexAROD)
+    plt.savefig('static/runsbyera.jpg')
+    
+    plt.clf()
+    erahits = [pre1975BattingPD[1].iloc[0], from75to90BattingPD[1].iloc[0], from90to05BattingPD[1].iloc[0], post2005BattingPD[1].iloc[0]]
+    plt.bar(index, erahits)
+    plt.xlabel("ERAS")
+    plt.ylabel("AVERAGE HITS")
+    plt.title("AVERAGE HITS BY ERA")
+    plt.xticks(index, indexAROD)
+    plt.savefig('static/hitsbyera.jpg')
+    
+    plt.clf()
+    eradoubles = [pre1975BattingPD[2].iloc[0], from75to90BattingPD[2].iloc[0], from90to05BattingPD[2].iloc[0], post2005BattingPD[2].iloc[0]]
+    plt.bar(index, eradoubles)
+    plt.xlabel("ERAS")
+    plt.ylabel("AVERAGE DOUBLES")
+    plt.title("AVERAGE DOUBLES BY ERA")
+    plt.xticks(index, indexAROD)
+    plt.savefig('static/doublesbyera.jpg')
+    
+    plt.clf()
+    eratriples = [pre1975BattingPD[3].iloc[0], from75to90BattingPD[3].iloc[0], from90to05BattingPD[3].iloc[0], post2005BattingPD[3].iloc[0]]
+    plt.bar(index, eratriples)
+    plt.xlabel("ERAS")
+    plt.ylabel("AVERAGE TRIPLES")
+    plt.title("AVERAGE TRIPLES BY ERA")
+    plt.xticks(index, indexAROD)
+    plt.savefig('static/triplesbyera.jpg')
+    
+    plt.clf()
+    erahomeruns = [pre1975BattingPD[4].iloc[0], from75to90BattingPD[4].iloc[0], from90to05BattingPD[4].iloc[0], post2005BattingPD[4].iloc[0]]
+    plt.bar(index, erahomeruns)
+    plt.xlabel("ERAS")
+    plt.ylabel("AVERAGE HOME RUNS")
+    plt.title("AVERAGE HOME RUNS BY ERA")
+    plt.xticks(index, indexAROD)
+    plt.savefig('static/homerunsbyera.jpg')
+    plt.clf()
+    return render_template('peds.html', pre1975Batting=pre1975Batting,from75to90Batting=from75to90Batting,from90to05Batting=from90to05Batting,post2005Batting=post2005Batting)
 
 @app.route('/datascience')
 def datascience():
@@ -116,7 +242,7 @@ def datascience():
     df = df.drop(['CS','HBP'], axis=1)
     df['SO'] = df['SO'].fillna(df['SO'].median())
     df['DP'] = df['DP'].fillna(df['DP'].median())
-    
+    matplotlib.pyplot.clf()
     matplotlib.pyplot.hist(df['W'])
     matplotlib.pyplot.xlabel('Wins')
     matplotlib.pyplot.title('Distribution of Wins')
@@ -253,6 +379,22 @@ def datascience():
 
     return render_template('datascience.html')
 
+@app.route('/lookupteam')
+def lookupTeam():
+    return render_template('lookupteam.html')
+
+@app.route('/lookupteam', methods=['POST'])
+def lookupTeamStats():
+    name = request.form['name']
+    name = '\"' + name + '\"'
+    year = request.form['year']
+    conn = get_db_connection()
+    getTeam = conn.execute('SELECT W,L,R,AB,H,"2B","3B",HR,BB,SO,SB,RA FROM Teams INNER JOIN TeamsFranchises ON Teams.franchID=TeamsFranchises.franchID WHERE TeamsFranchises.franchName = ' + name + ' AND Teams.yearID = ' + year).fetchall()
+    avgTeam = conn.execute('SELECT AVG(W),AVG(L),AVG(R),AVG(AB),AVG(H),AVG("2B"),AVG("3B"),AVG(HR),AVG(BB),AVG(SO),AVG(SB),AVG(RA) FROM Teams INNER JOIN TeamsFranchises ON Teams.franchID=TeamsFranchises.franchID WHERE Teams.yearID = ' + year).fetchall()
+    
+    name = name[1:len(name)-1]
+    return render_template('lookupteamsstats.html', getTeam=getTeam, name=name, year=year, avgTeam=avgTeam)
+
 @app.route('/lookup')
 def lookup():
     return render_template('lookup.html')
@@ -318,19 +460,6 @@ def lookupplayer():
 
     arodFielding = conn.execute('SELECT yearID,teamID,Pos,G,A,E,ZR FROM People INNER JOIN Fielding ON People.playerID=Fielding.playerID WHERE People.nameFirst = ' + firstName + ' AND People.nameLast = ' + lastName).fetchall()
     avgZoneR = conn.execute('SELECT yearID,AVG(ZR) FROM Fielding WHERE yearID in (SELECT yearID FROM People INNER JOIN Fielding ON People.playerID=Fielding.playerID WHERE People.nameFirst = ' + firstName + ' AND People.nameLast = ' + lastName + ') GROUP BY yearID').fetchall()
-
-    # arodSalary = conn.execute('SELECT yearID, salary FROM People INNER JOIN Salaries ON People.playerID=Salaries.playerID WHERE People.nameFirst = ' + firstName + ' AND People.nameLast = ' + lastName).fetchall()
-    # avgSalary = conn.execute('SELECT yearID, AVG(salary) FROM SALARIES WHERE yearID IN (SELECT yearID FROM People INNER JOIN Salaries ON People.playerID=Salaries.playerID WHERE People.nameFirst = ' + firstName + ' AND People.nameLast = ' + lastName + ') GROUP BY yearID').fetchall()
-    # avgSalaryPD = pd.DataFrame(avgSalary)
-    # pdarodSalary = pd.DataFrame(arodSalary)
-    # cols = ['year salary']
-    # avgSalaryPD.rename(columns = {0:'year', 1:'salary'}, inplace = True)
-    # pdarodSalary.rename(columns = {0:'year', 1:'salary'}, inplace = True)
-    # indexARODSalary = pdarodSalary['year'].tolist()
-    # dfSalary = pd.DataFrame({'avgSalary': avgSalaryPD['salary'].tolist(), 'PlayerSalary':pdarodSalary['salary'].tolist()}, index=indexARODSalary)
-    # axSalary = dfSalary.plot.bar(rot=90, title= name + " Salary VS Average MLB Salary")
-    # figSalary = axSalary.get_figure()
-    # figSalary.savefig('static/playersalary.jpg')
 
     arodAwards = conn.execute('SELECT * FROM People INNER JOIN AwardsPlayers ON People.playerID=AwardsPlayers.playerID WHERE People.nameFirst = ' + firstName + ' AND People.nameLast = ' + lastName).fetchall()
     
